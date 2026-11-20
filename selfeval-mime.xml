@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-selfeval-exam">
+    <comment>SelfEval contest</comment>
+    <comment xml:lang="zh_CN">SelfEval 比赛</comment>
+    <glob pattern="*.seexam"/>
+  </mime-type>
+</mime-info>

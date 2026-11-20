@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=SelfEval
+GenericName=Programming contest judge
+GenericName[zh_CN]=编程比赛自评测
+Comment=Open a contest and test your solutions locally
+Comment[zh_CN]=打开比赛，提交代码并查看本地评测结果
+Exec=kamome-selfeval --gui %f
+Icon=selfeval
+Terminal=false
+MimeType=application/x-selfeval-exam;
+Categories=Education;ComputerScience;
+StartupNotify=false
+StartupWMClass=SelfEval

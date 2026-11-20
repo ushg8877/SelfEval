@@ -1,0 +1,60 @@
+#!/bin/sh
+set -eu
+here=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "本地自测需要 Python 3.8 或更高版本。" >&2
+    exit 2
+fi
+launch_window() {
+    module=$1
+    shift
+    if [ -z "${DISPLAY:-}" ]; then
+        echo "图形界面需要 Linux 桌面。终端模式可运行 selfeval --cli。" >&2
+        exit 2
+    fi
+    if ! python3 -c 'import tkinter' 2>/dev/null; then
+        echo "图形界面需要 Python Tk。在 NOI Linux / Ubuntu 上可安装 python3-tk。" >&2
+        exit 2
+    fi
+    if ! command -v setsid >/dev/null 2>&1; then
+        echo "缺少 setsid，请安装 util-linux。" >&2
+        exit 2
+    fi
+    state=${XDG_STATE_HOME:-}
+    case "$state" in /*) ;; *) state="$HOME/.local/state" ;; esac
+    umask 077
+    mkdir -p -- "$state/selfeval"
+    # Give Tk a new session and release all handles on the invoking terminal.
+    exec setsid -f -- python3 "$here/$module.py" "$@" </dev/null >>"$state/selfeval/$module.log" 2>&1
+}
+gui() {
+    launch_window gui "$@"
+}
+case "${1:-}" in
+    --install)
+        if [ -f "$here/install.sh" ]; then exec sh "$here/install.sh"; fi
+        echo "SelfEval 已安装。可从应用菜单打开。"
+        exit 0 ;;
+    --gui)
+        shift
+        if [ "$#" -gt 1 ]; then echo "用法：selfeval --gui [比赛文件.seexam]" >&2; exit 2; fi
+        gui "$@" ;;
+    --studio)
+        shift
+        if [ "$#" -eq 0 ]; then launch_window studio; fi
+        exec python3 "$here/studio.py" "$@" ;;
+    --serve) shift; exec python3 "$here/service.py" "$@" ;;
+    --cli) shift; exec python3 "$here/menu.py" "$@" ;;
+    *.seexam) if [ "$#" -eq 1 ]; then
+        if [ -n "${DISPLAY:-}" ] && python3 -c 'import tkinter' 2>/dev/null; then
+            gui "$1"
+        else
+            exec python3 "$here/menu.py" --exam "$1"
+        fi
+    fi ;;
+esac
+if [ "$#" -gt 0 ]; then exec python3 "$here/menu.py" "$@"; fi
+if [ -n "${DISPLAY:-}" ] && python3 -c 'import tkinter' 2>/dev/null; then
+    gui
+fi
+exec python3 "$here/menu.py"

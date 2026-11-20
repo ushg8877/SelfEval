@@ -1,0 +1,6 @@
+* text=auto
+selfeval text eol=lf
+selfeval-studio text eol=lf
+*.sh text eol=lf
+*.desktop text eol=lf
+*.pdf binary

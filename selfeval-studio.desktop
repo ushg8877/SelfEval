@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=SelfEval Studio
+Name[zh_CN]=SelfEval Studio 组赛器
+Comment=Prepare problems and export a local programming contest
+Comment[zh_CN]=编辑比赛草稿、导入数据并导出本地比赛包
+Exec=selfeval-studio
+Icon=selfeval
+Terminal=false
+Categories=Education;ComputerScience;
+StartupNotify=false
+StartupWMClass=SelfEvalStudio
