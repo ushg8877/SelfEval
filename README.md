@@ -4,6 +4,20 @@
 
 [下载安装包与示例工程](https://github.com/ushg8877/SelfEval/releases) · [中文使用手册（PDF，8 页）](docs/manual-zh.pdf)
 
+## 软件截图
+
+**ICPC 选手端**　比赛倒计时和提交记录在同一个窗口。图中选手第一次提交 B 题得到 WA，修改后再次提交得到 AC。
+
+![ICPC 示例赛的选手界面，显示倒计时与 Hello World、A+B 的提交记录](https://raw.githubusercontent.com/ushg8877/SelfEval/main/docs/screenshots/player.png)
+
+**IOI 选手端**　选中一次提交，可以查看每个测试点的用时和内存。图中 B 题的 3 个测试点全部通过，本题得到 100 分。
+
+![IOI 示例赛的选手界面，左侧是总分和提交记录，右侧是 A+B 的三个测试点](https://raw.githubusercontent.com/ushg8877/SelfEval/main/docs/screenshots/ioi.png)
+
+**SelfEval Studio**　组题人设置赛制和时长，为每道题指定题面 PDF 和数据包，然后导出选手可以打开的 `.seexam` 文件。
+
+![SelfEval Studio 组赛器，打开了包含 Hello World 和 A+B 两题的示例工程](https://raw.githubusercontent.com/ushg8877/SelfEval/main/docs/screenshots/studio.png)
+
 ## 用两道题跑通流程
 
 1. 在 Debian 或 Ubuntu 上安装下载的 `.deb`，打开应用菜单里的 **SelfEval Studio**。
