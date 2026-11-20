@@ -388,13 +388,8 @@ class SelfEval:
             self.icpc_lobby = False
         self.exam_name.set(getattr(exam, "title", None) or path.name)
         self.ioi_best = ioi_scores(exam) if exam.style == "ioi" else {}
-        if exam.style in ("oi", "ioi"):
-            self.details_frame.grid()
-            self.details.heading("样例", text="测试点" if exam.style == "ioi" else "样例")
-            self.summary_label.grid_configure(row=2, sticky="ew")
-        else:
-            self.details_frame.grid_remove()
-            self.summary_label.grid_configure(row=1, sticky="nw")
+        self.show_case_table(exam.style != "standard")
+        self.details.heading("样例", text="样例" if exam.style == "oi" else "测试点")
         if not same_exam:
             self.prob_box.configure(values=())
             self.question.set("")
@@ -601,6 +596,7 @@ class SelfEval:
             self.summary.set(f"{self.exam.problem_label(pid)}  历史最佳 {self.ioi_best.get(pid, 0):g} 分")
         else:
             self.summary.set("这道题还没有评测记录。")
+        self.show_case_table(self.exam.style != "standard")
         self.set_note("")
 
     def choose_test(self):
@@ -806,6 +802,14 @@ class SelfEval:
         row = self.history.selection()
         return self.history_data.get(row[0]) if row else None
 
+    def show_case_table(self, visible):
+        if visible:
+            self.details_frame.grid()
+            self.summary_label.grid_configure(row=2, sticky="ew")
+        else:
+            self.details_frame.grid_remove()
+            self.summary_label.grid_configure(row=1, sticky="nw")
+
     def select_history(self, _event=None):
         record = self.selected_record()
         selection = self.history.selection()
@@ -813,6 +817,8 @@ class SelfEval:
         previous = self.details.selection() if row_id == self.displayed_row else ()
         self.displayed_row = row_id
         self.details.delete(*self.details.get_children())
+        if self.exam and self.exam.style == "standard":
+            self.show_case_table(bool(not self.active and record and record["cases"]))
         if self.active:
             self.summary.set("正在评测")
             self.set_note("")
@@ -894,10 +900,9 @@ class SelfEval:
         status = result.get("status", "ERROR")
         record["note"] = result.get("diagnostic", "") if status == "CE" else ""
         record["summary"] = result.get("summary") or status
-        if self.exam.style in ("oi", "ioi"):
-            record["cases"] = result.get("cases", [])
-            record["failure"] = next((i for i, case in enumerate(record["cases"])
-                                      if case["status"] != "AC"), None)
+        record["cases"] = result.get("cases", [])
+        record["failure"] = next((i for i, case in enumerate(record["cases"])
+                                  if case["status"] != "AC"), None)
         label = status
         if self.exam.style == "ioi" and isinstance(result.get("score"), (int, float)):
             label = f"{status}  {result['score']:g} 分"

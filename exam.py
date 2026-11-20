@@ -407,11 +407,12 @@ def student_result(exam, result):
     if status == "ERROR":
         from judge import environment_summary
         error = environment_summary(result.get("environment_phase"), result.get("environment_reason"))
-    if exam.style == "ioi":
-        # Checker differences and the contestant's stderr can contain private
-        # input/answer text. Retain only the quantities shown on the scoreboard.
+    cases = []
+    if exam.style == "ioi" or status == "AC":
+        # Checker messages and contestant stderr can contain private test data.
         cases = [{key: item[key] for key in ("number", "status", "time_ms", "memory_kb", "extra") if key in item}
                  for item in result.get("cases", ())]
+    if exam.style == "ioi":
         score, maximum = result.get("score"), result.get("max_score")
         if status == "ERROR":
             summary = error
@@ -432,7 +433,7 @@ def student_result(exam, result):
     else:
         summary = f"{status} · {names.get(status, '评测环境异常')}"
     return dict(status=status, summary=summary, diagnostic=result.get("diagnostic", "") if status == "CE" else "",
-                cases=[], score=None, max_score=None)
+                cases=cases, score=None, max_score=None)
 
 
 def _official_result(archive, pid, source, cancel=None):

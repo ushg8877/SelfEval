@@ -42,11 +42,10 @@ def submit_batch(exam, submissions, *, submitted_at=None):
             print(f"{exam.problem_label(pid)}　{result['summary']}　历史最佳 {best.get(pid, 0):g}")
         else:
             print(f"{exam.problem_label(pid)}　{result['summary']}")
-        if exam.style in ("oi", "ioi"):
-            for case in result["cases"]:
-                memory = "—" if case["memory_kb"] is None else f"{case['memory_kb']} KiB"
-                print(f"{case['number']:>5}  {case['status']:5}  {case['time_ms']:8} ms  "
-                      f"{memory:>12}  {case.get('message', '')}")
+        for case in result["cases"]:
+            memory = "—" if case["memory_kb"] is None else f"{case['memory_kb']} KiB"
+            print(f"{case['number']:>5}  {case['status']:5}  {case['time_ms']:8} ms  "
+                  f"{memory:>12}  {case.get('message', '')}")
         if result.get("diagnostic"):
             print(result["diagnostic"])
         if result["status"] != "AC":

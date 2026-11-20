@@ -22,6 +22,7 @@ SOURCE = PLAYER + (
     ".gitignore", ".gitattributes", "debian_package.py", "release.py",
     "docs/manual_zh.py", "examples/make_demo.py",
     "tests/test_studio.py", "tests/test_studio_data.py", "tests/test_release.py",
+    "tests/test_student_feedback.py",
 )
 EXECUTABLES = {"selfeval", "selfeval-studio", "install.sh"}
 

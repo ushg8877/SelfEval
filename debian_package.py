@@ -8,7 +8,7 @@ import tarfile
 
 APP = "kamome-selfeval"
 BASE = "usr/share/" + APP
-VERSION = "1.2.0"
+VERSION = "1.2.1"
 
 
 def tar_gz(files):
